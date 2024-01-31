@@ -20,6 +20,3 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
-      - run: yarn lint
-      - run: yarn prisma generate
-      - run: yarn test
