@@ -1,9 +1,10 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule } from '@nestjs/swagger';
-import { config as swaggerConfig } from './config/swagger-config';
+import { config as swaggerConfig } from './config/swagger.config';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
+import { validationPipe } from './config/validation.pipe';
 
 async function bootstrap() {
   const logger = new Logger('Main');
@@ -13,6 +14,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
 
   SwaggerModule.setup('api', app, document);
+
+  app.useGlobalPipes(validationPipe);
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(port, () => {
     logger.log(`Server listening port: ${port}`);
