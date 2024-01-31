@@ -1,20 +1,33 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AppService } from './book.service';
-import { Book } from './entities/book.entity';
+import { BookService } from './book.service';
+import { BookEntity } from './entities/book.entity';
+import { CreateBookDto } from './dto/create-book.dto';
 
+@ApiTags('book')
 @Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+export class BookController {
+  constructor(private readonly bookService: BookService) {}
 
   @ApiResponse({
     status: 200,
     description: 'The found record',
-    type: Book,
+    type: BookEntity,
+    isArray: true,
   })
-  @ApiTags('Book')
   @Get()
-  getHello() {
-    return this.appService.getHello();
+  async findAll() {
+    const book = await this.bookService.findAll();
+    return book.map((book) => new BookEntity(book));
+  }
+
+  @ApiResponse({
+    status: 201,
+    description: 'The found record',
+    type: BookEntity,
+  })
+  @Post()
+  async create(@Body() data: CreateBookDto) {
+    return new BookEntity(await this.bookService.create(data));
   }
 }
