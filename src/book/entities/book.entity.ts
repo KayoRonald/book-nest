@@ -1,32 +1,55 @@
+import { Book } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsUUID } from 'class-validator';
 
-export class Book {
+export class BookEntity implements Book {
   /**
-   * The name of the Book
-   * @example Kitty
+   * The title of the book.
+   * @example uuid
+   */
+  @ApiProperty({ example: '3ecd7c72-4190-43d7-8633-8fa0d0993d1a' })
+  @IsUUID()
+  id: string;
+  /**
+   * The title of the book.
+   * @example The Lord of the Rings
    */
   @ApiProperty({
-    example: '1',
-    description: 'The age of the Book',
+    example: 'The Lord of the Rings',
+    description: 'The title of the book',
   })
-  name: string;
+  title: string;
 
   /**
-   * The name of the Book
-   * @example 1
+   * The thumbnail image URL for the book.
+   * @example https://example.com/book-thumbnail.jpg
    */
   @ApiProperty({
-    example: 1,
-    description: 'The age of the Book',
+    example: 'https://example.com/book-thumbnail.jpg',
+    description: 'The thumbnail image URL',
   })
-  age: number;
+  thumbl: string;
+
   /**
-   * The name of the Book
-   * @example Maine Coon
+   * The description of the book.
+   * @example An epic fantasy trilogy by J.R.R. Tolkien.
    */
   @ApiProperty({
-    example: 'Maine Coon',
-    description: 'The breed of the Book',
+    example: 'An epic fantasy trilogy by J.R.R. Tolkien.',
+    description: 'The description of the book',
   })
-  breed: string;
+  description: string;
+
+  /**
+   * The price of the book.
+   * @example 29.99
+   */
+  @ApiProperty({
+    example: 29.99,
+    description: 'The price of the book',
+  })
+  price: number;
+  constructor({ ...data }: Partial<BookEntity>) {
+    Object.assign(this, data);
+  }
 }
