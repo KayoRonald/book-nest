@@ -10,10 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String @id @default(uuid())
+  name      String
+  username  String @unique
+  email     String @unique
+  password String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
 model Book {
   id          String @id @default(uuid())
   title       String
   thumbl      String
   description String
   price       Float
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

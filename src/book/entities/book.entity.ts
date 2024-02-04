@@ -49,6 +49,18 @@ export class BookEntity implements Book {
     description: 'The price of the book',
   })
   price: number;
+
+  @ApiProperty({
+    description: 'Timestamp when the user was created.',
+    example: '2024-02-01T12:00:00Z',
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    description: 'Timestamp when the user was last updated.',
+    example: '2024-02-01T12:30:00Z',
+  })
+  updatedAt: Date;
   constructor({ ...data }: Partial<BookEntity>) {
     Object.assign(this, data);
   }
