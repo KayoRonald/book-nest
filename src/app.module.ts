@@ -5,6 +5,8 @@ import { BookService } from './book/book.service';
 import { PrismaModule } from './prisma/prisma.module';
 import configuration from './config/configuration';
 import { BookModule } from './book/book.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/user.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { BookModule } from './book/book.module';
     }),
     PrismaModule,
     BookModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [BookController],
   providers: [BookService],
