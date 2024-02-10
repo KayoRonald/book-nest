@@ -28,7 +28,7 @@ export class BookEntity implements Book {
     example: 'https://example.com/book-thumbnail.jpg',
     description: 'The thumbnail image URL',
   })
-  thumbl: string;
+  thumbnail: string;
 
   /**
    * The description of the book.

@@ -35,7 +35,7 @@ export class CreateBookDto {
     example: 'https://example.com/book-thumbnail.jpg',
     description: 'The thumbnail image URL',
   })
-  thumbl: string;
+  thumbnail: string;
 
   @IsPositive()
   @IsNotEmpty()
