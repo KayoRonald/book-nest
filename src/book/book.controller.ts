@@ -39,13 +39,16 @@ export class BookController {
     return books.map((book) => new BookEntity(book));
   }
 
+  @Get(':id')
   @ApiResponse({
     status: 200,
     description: 'The found book',
     type: BookEntity,
   })
   @ApiResponse({ status: 404, description: 'Book not found' })
-  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async findOne(@Param('id') id: string): Promise<BookEntity> {
     const book = await this.bookService.findOne(id);
     if (!book) {
@@ -60,6 +63,9 @@ export class BookController {
     description: 'The created book',
     type: BookEntity,
   })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async create(@Body() data: CreateBookDto): Promise<BookEntity> {
     const createdBook = await this.bookService.create(data);
     return new BookEntity(createdBook);
@@ -72,6 +78,9 @@ export class BookController {
     type: BookEntity,
   })
   @ApiResponse({ status: 404, description: 'Book not found' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async update(
     @Param('id') id: string,
     @Body() data: CreateBookDto,
@@ -87,6 +96,9 @@ export class BookController {
   @Delete(':id')
   @ApiResponse({ status: 204, description: 'Book successfully deleted' })
   @ApiResponse({ status: 404, description: 'Book not found' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async remove(@Param('id') id: string): Promise<void> {
     const book = await this.bookService.findOne(id);
     if (!book) {

@@ -9,7 +9,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,6 +31,9 @@ export class UserController {
     type: UserEntity,
     isArray: true,
   })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async findAll(): Promise<UserEntity[]> {
     const users = await this.userService.findAll();
     return users.map((user) => new UserEntity(user));
@@ -38,6 +46,9 @@ export class UserController {
   })
   @Get(':id')
   @ApiResponse({ status: 404, description: 'User not found' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async findOne(@Param('id') id: string): Promise<UserEntity> {
     const user = await this.userService.findOne(id);
     if (!user) {
@@ -64,6 +75,9 @@ export class UserController {
     type: UserEntity,
   })
   @ApiResponse({ status: 404, description: 'User not found' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async update(
     @Param('id') id: string,
     @Body() data: CreateUserDto,
@@ -81,6 +95,7 @@ export class UserController {
   @ApiResponse({ status: 404, description: 'User not found' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiUnauthorizedResponse()
   async remove(@Param('id') id: string): Promise<void> {
     const user = await this.userService.findOne(id);
     if (!user) {
